@@ -1,0 +1,22 @@
+#!/bin/sh
+# 
+# Initial user and directory setup
+echo 'Creating a new system account "mongodb" ...'
+useradd -s /sbin/nologin -r mongodb
+echo 'Creating directory /opt/mongo/data ...'
+mkdir /opt/mongo/data
+echo 'Creating directory /opt/mongo/log ...'
+mkdir /opt/mongo/log
+echo 'Changing the owner of directory /opt/mongo/data to mongodb ...'
+chown mongodb /opt/mongo/data
+echo 'Changing the owner of directory /opt/mongo/log to mongodb ...'
+chown mongodb /opt/mongo/log
+# Copy the init script and config file
+echo 'Copying init script to /etc/init.d/mongod ...'
+cp ./etc/init.d/mongodb /etc/init.d/mongodb
+echo 'Making init script executable ...'
+chmod +x /etc/init.d/mongodb
+echo 'Setting up runtime links ...'
+update-rc.d mongodb defaults
+echo 'Starting MongoDB Server ...'
+/etc/init.d/mongodb start
